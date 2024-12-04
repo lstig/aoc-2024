@@ -66,6 +66,6 @@ mod tests {
             1 3 6 7 9"
         };
         let result = part2(input);
-        assert_eq!(result, 0)
+        assert_eq!(result, 4)
     }
 }
