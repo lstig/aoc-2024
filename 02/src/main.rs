@@ -8,24 +8,18 @@ fn main() {
 fn part1(input: &str) -> u32 {
     let mut safe: u32 = 0;
     'line: for line in input.lines() {
-        let mut last: Option<i32> = None;
         let mut direction: Option<i32> = None;
-        for level in line.split_ascii_whitespace() {
-            let this : i32 = level.parse().unwrap();
-            match last {
-                Some(prev) => {
-                    let dir = direction.or(Some((this - prev).signum())).unwrap();
-                    if dir == 0 || dir != (this - prev).signum() {
-                        continue 'line;
-                    }
-                    if this.abs_diff(prev) > 3 || this.abs_diff(prev) < 1 {
-                        continue 'line;
-                    }
-                    direction = Some((this - prev).signum());
-                    last = Some(this);
-                }
-                _ => last = Some(this),
+        let levels: Vec<i32> = line.split_ascii_whitespace().map(|x| x.parse().unwrap()).collect();
+        for window in levels.windows(2) {
+            let [x, y] = [window[0], window[1]];
+            let dir = direction.unwrap_or((y - x).signum());
+            if dir == 0 || dir != (y - x).signum() {
+                continue 'line;
             }
+            if y.abs_diff(x) > 3 || y.abs_diff(x) < 1 {
+                continue 'line;
+            }
+            direction = Some(dir);
         }
         safe += 1;
     }
